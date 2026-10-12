@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقيم آداء قسم الكنترول | سبتمبر 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card: rgba(255, 255, 255, 0.65);
+            --text: #0f172a;
+            --primary: #1e293b;
+            --sec: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --purple: #8b5cf6;
+        }
+        
+        *, body, span, div, p, h1, h2, h3, h4, ul, li { 
+            font-family: 'Cairo', sans-serif !important; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            background: var(--bg); margin: 0; padding: 0; color: var(--text); 
+            font-size: 15.5px; line-height: 1.7; min-height: 100vh; 
+            background-attachment: fixed; 
+        }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes progress {
+            from { stroke-dasharray: 0, 100; }
+        }
+        
+        .container { padding: 40px; max-width: 1600px; margin: 0 auto; }
+        
+        .section-title { 
+            color: var(--primary); font-size: 22px; margin: 20px 0 40px; 
+            font-weight: 900; background: rgba(255,255,255,0.85); 
+            backdrop-filter: blur(15px); padding: 18px 30px; 
+            border-right: 8px solid var(--sec); border-radius: 22px; 
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); 
+            border: 1px solid rgba(255,255,255,1); 
+        }
+
+        .grid-cards { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 30px; 
+            padding-bottom: 25px; 
+        }
+        
+        .glass-card { 
+            background: var(--card); 
+            backdrop-filter: blur(40px); 
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.9); 
+            border-radius: 30px; 
+            padding: 28px; 
+            position: relative; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255,255,255,0.5); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .glass-card.capture-mode,
+        .glass-card.capture-mode * {
+            animation: none !important; 
+        }
+        .glass-card.capture-mode {
+            background: #ffffff !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
+            border: 1px solid #e2e8f0 !important;
+            opacity: 1 !important;      
+            transform: none !important;
+        }
+        .glass-card.capture-mode p[style*="rgba(255, 255, 255"],
+        .glass-card.capture-mode div[style*="rgba(255, 255, 255"] {
+            background: #f8fafc !important;
+        }
+        
+        .glass-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.07), inset 0 0 0 1px rgba(255,255,255,0.8); 
+        }
+
+        .download-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            color: #64748b;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .download-btn:hover {
+            background: var(--sec);
+            color: white;
+            transform: scale(1.1) rotate(-10deg);
+            border-color: var(--sec);
+        }
+
+        .interactive-list { list-style: none; padding: 0; margin: 0; font-size: 0.95rem; line-height: 2; }
+        .interactive-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; margin-bottom: 6px; border-radius: 14px; transition: all 0.3s ease; }
+        .interactive-list li:hover { background: rgba(255,255,255,0.9); transform: scale(1.02); }
+        .interactive-list span { color: #64748b; font-weight: 700; }
+
+        /* Rank Badge */
+        .rank-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .rank-1 { background: linear-gradient(135deg, #fbbf24, #d97706); } /* الأول: ذهبي */
+        .rank-2 { background: linear-gradient(135deg, #94a3b8, #64748b); } /* الثاني: فضي */
+        .rank-3 { background: linear-gradient(135deg, #d97706, #b45309); } /* الثالث: برونزي */
+        
+        @media(max-width: 768px) { 
+            .grid-cards { grid-template-columns: 1fr; } 
+            .container { padding: 20px 15px; }
+            .section-title { flex-direction: column; gap: 10px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="section-title">
+            <div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:10px; vertical-align:-5px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                تقيم آداء موظفي الكنترول (سبتمبر 2026)
+            </div>
+            <div style="font-size: 14px; color: #64748b; font-weight: 800;">تجمع الأحساء الصحي | مستشفى الملك فهد بالهفوف | إدارة المرافق</div>
+        </div>
+
+        <div class="grid-cards">
+            
+            <!-- 1. FATIMA ALQATTAN -->
+            <div class="glass-card" style="border-top: 6px solid var(--success);" id="card-fatima-q">
+                <button class="download-btn" onclick="downloadCardAsImage('card-fatima-q', 'FATIMA_ALQATTAN')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div class="rank-badge rank-1">1</div>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">FATIMA ALQATTAN</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="72.4, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">72.4%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--success);">502</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--success);">72.4%</strong></div>
+                        <div style="width: 100%; background-color: rgba(16, 185, 129, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 72.4%; background-color: var(--success); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 2. FATIMA SAAD -->
+            <div class="glass-card" style="border-top: 6px solid var(--success);" id="card-fatima-s">
+                <button class="download-btn" onclick="downloadCardAsImage('card-fatima-s', 'FATIMA_SAAD')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div class="rank-badge rank-3">2</div>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">FATIMA SAAD</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="70.2, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">70.2%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--success);">442</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--success);">64.2%</strong></div>
+                        <div style="width: 100%; background-color: rgba(16, 185, 129, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 64.2%; background-color: var(--success); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 3. KHADIJAH -->
+            <div class="glass-card" style="border-top: 6px solid var(--success);" id="card-khadijah">
+                <button class="download-btn" onclick="downloadCardAsImage('card-khadijah', 'KHADIJAH')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div class="rank-badge rank-2">3</div>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">KHADIJAH</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="68.7, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">68.7%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--success);">376</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--success);">68.7%</strong></div>
+                        <div style="width: 100%; background-color: rgba(16, 185, 129, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 68.7%; background-color: var(--success); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- 4. FATIMA ALHUMAID -->
+            <div class="glass-card" style="border-top: 6px solid var(--info);" id="card-fatima-h">
+                <button class="download-btn" onclick="downloadCardAsImage('card-fatima-h', 'FATIMA_ALHUMAID')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">FATIMA ALHUMAID</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="51.5, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--info)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">51.5%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--info);">320</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--info);">51.5%</strong></div>
+                        <div style="width: 100%; background-color: rgba(59, 130, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 51.5%; background-color: var(--info); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 5. PERWEZ -->
+            <div class="glass-card" style="border-top: 6px solid var(--info);" id="card-perwez">
+                <button class="download-btn" onclick="downloadCardAsImage('card-perwez', 'PERWEZ')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">PERWEZ</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="50.6, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--info)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">50.6%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--info);">311</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--info);">50.6%</strong></div>
+                        <div style="width: 100%; background-color: rgba(59, 130, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 50.6%; background-color: var(--info); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 6. IBRAHIM ALHASSAN -->
+            <div class="glass-card" style="border-top: 6px solid var(--info);" id="card-ibrahim">
+                <button class="download-btn" onclick="downloadCardAsImage('card-ibrahim', 'IBRAHIM_ALHASSAN')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">IBRAHIM ALHASSAN</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="38.5, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--info)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">38.5%</div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--info);">210</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--info);">38.5%</strong></div>
+                        <div style="width: 100%; background-color: rgba(59, 130, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 38.5%; background-color: var(--info); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 7. ABDULAZIZ ALNAS -->
+            <div class="glass-card" style="border-top: 6px solid var(--warning);" id="card-abdulaziz">
+                <button class="download-btn" onclick="downloadCardAsImage('card-abdulaziz', 'ABDULAZIZ_ALNAS')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">ABDULAZIZ ALNAS</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="21.6, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--warning)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">21.6%</div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--warning);">118</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--warning);">82%</strong></div>
+                        <div style="width: 100%; background-color: rgba(245, 158, 11, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 82%; background-color: var(--warning); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--warning);">21.6%</strong></div>
+                        <div style="width: 100%; background-color: rgba(245, 158, 11, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 21.6%; background-color: var(--warning); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 8. KHALID -->
+            <div class="glass-card" style="border-top: 6px solid var(--danger);" id="card-khalid">
+                <button class="download-btn" onclick="downloadCardAsImage('card-khalid', 'KHALID')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">KHALID</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="13.9, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">13.9%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--danger);">76</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--danger);">13.9%</strong></div>
+                        <div style="width: 100%; background-color: rgba(239, 68, 68, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 13.9%; background-color: var(--danger); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 9. MAHDI -->
+            <div class="glass-card" style="border-top: 6px solid var(--danger);" id="card-mahdi">
+                <button class="download-btn" onclick="downloadCardAsImage('card-mahdi', 'MAHDI')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">MAHDI</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="8.2, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">8.2%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--danger);">45</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--danger);">8.2%</strong></div>
+                        <div style="width: 100%; background-color: rgba(239, 68, 68, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 8.2%; background-color: var(--danger); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 10. YOUSEF -->
+            <div class="glass-card" style="border-top: 6px solid var(--danger);" id="card-yousef">
+                <button class="download-btn" onclick="downloadCardAsImage('card-yousef', 'YOUSEF')" title="تحميل كصورة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                <div style="text-align: center;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 900; font-size: 1.15rem;">YOUSEF</h3>
+                    <p style="color: #475569; font-size: 0.85rem; font-weight: bold; background: rgba(255, 255, 255, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.9);">مؤشر الأداء العام</p>
+                    <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                        <svg viewBox="0 0 36 36" style="width: 100%; height: 100%;">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="3" />
+                            <path class="circle" stroke-dasharray="11.3, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" style="animation: progress 1.5s ease-out forwards;" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 900; color: #1e293b;">11.3%</div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 5px; text-align: center; background: rgba(255, 255, 255, 0.5); padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.7);">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: bold;">إجمالي البلاغات المفتوحة (تراكمي)</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--danger);">62</div>
+                    </div>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed rgba(0, 0, 0, 0.08); margin: 18px 0;">
+                <ul class="interactive-list">
+                    <li><div style="display: flex; justify-content: space-between;"><span> إجمالي بلاغات (مرافق):</span> <strong>3865</strong></div></li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> جودة العناوين (بروتوكول):</span> <strong style="color: var(--purple);">100%</strong></div>
+                        <div style="width: 100%; background-color: rgba(139, 92, 246, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 100%; background-color: var(--purple); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                    <li style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;"><span> متوسط العبء:</span> <strong style="color: var(--danger);">11.3%</strong></div>
+                        <div style="width: 100%; background-color: rgba(239, 68, 68, 0.15); border-radius: 10px; height: 8px; margin-top: 5px; overflow: hidden;"><div style="width: 11.3%; background-color: var(--danger); height: 100%; border-radius: 10px;"></div></div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- زر العودة للأعلى -->
+    <button id="scrollTopBtn" onclick="scrollToTop()" title="العودة للأعلى">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+
+    <script>
+        // التمرير للأعلى
+        let scrollBtn = document.getElementById("scrollTopBtn");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+                scrollBtn.classList.add("show");
+            } else {
+                scrollBtn.classList.remove("show");
+            }
+        };
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // حفظ بطاقة التقييم كصورة عالية الدقة
+        function downloadCardAsImage(cardId, employeeName) {
+            const cardElement = document.getElementById(cardId);
+            const downloadBtn = cardElement.querySelector('.download-btn');
+
+            downloadBtn.style.display = 'none';
+            cardElement.classList.add('capture-mode');
+
+            setTimeout(() => {
+                html2canvas(cardElement, {
+                    scale: 3, 
+                    backgroundColor: '#ffffff', 
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
+                    downloadBtn.style.display = 'flex';
+                    cardElement.classList.remove('capture-mode');
+                    
+                    const image = canvas.toDataURL("image/png");
+                    const link = document.createElement('a');
+                    link.download = `تقييم_أداء_${employeeName}_تراكمي_سبتمبر.png`;
+                    link.href = image;
+                    link.click();
+                }).catch(err => {
+                    console.error("حدث خطأ أثناء التقاط الصورة:", err);
+                    downloadBtn.style.display = 'flex'; 
+                    cardElement.classList.remove('capture-mode');
+                    alert("تعذر حفظ الصورة، يرجى المحاولة مرة أخرى.");
+                });
+            }, 350); 
+        }
+    </script>
+
+</body>
+</html>
